@@ -1,20 +1,21 @@
 import socket
 
-class Slave:
-    def __init__(self, ip: str, port: int, master_ip: str, master_port: int, array: list) -> None:
-        self.ip = ip
-        self.port = port
-        self.master_ip = master_ip
-        self.master_port = master_port
-        self.array = array
+if __name__ == "__main__":
+    # Create a socket object
+    ip = "10.0.1.42"
+    # ip = "127.0.0.1"
+    port = 20022
 
-    def start(self) -> None:
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.connect((self.master_ip, self.master_port))
-            result = 0
-            for i in self.array:
-                result += i
-            s.sendall(str(result).encode())
-            data = s.recv(1024)
-            print(f"Datos recibidos {data!r}")
-            s.close()
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind((ip, port))
+        s.listen(1)
+        conn, addr = s.accept()
+        with conn:
+            print(f"Se ha recibido una conexión de {addr}")
+            while True:
+                data = conn.recv(1024)
+                if not data:
+                    break
+                elif type(eval(data.decode())) == list:
+                    res = sum(eval(data.decode()))
+                conn.sendall(str(res).encode())
