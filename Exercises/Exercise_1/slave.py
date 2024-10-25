@@ -3,7 +3,6 @@ import socket
 if __name__ == "__main__":
     # Create a socket object
     ip = "10.0.1.42"
-    # ip = "127.0.0.1"
     port = 20022
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
